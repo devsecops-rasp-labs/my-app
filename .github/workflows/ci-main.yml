@@ -4,6 +4,10 @@ on:
   push:
     branches: [main]
 
+permissions:
+  contents: read
+  packages: write
+
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
@@ -22,7 +26,11 @@ jobs:
       - name: Run tests
         run: npm test
 
-      - name: Build info
-        run: |
-          echo "Commit SHA: ${{ github.sha }}"
-          echo "Build successful — ready for deployment"
+  docker-build-push:
+    needs: build-and-test
+    uses: kse-bd8338bbe006/kse-labs-trusted-workflows/.github/workflows/docker-build.yaml@main
+    secrets: inherit
+    with:
+      image-name: my-app
+      tags: '${{ github.sha }},latest'
+      push: true
