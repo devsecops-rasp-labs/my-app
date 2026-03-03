@@ -12,7 +12,6 @@ app.get('/health', (req, res) => {
 
 if (require.main === module) {
   app.listen(port, () => console.log(`Listening on port ${port}`));
-  
 }
 
 module.exports = app;
